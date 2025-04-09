@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:fl_chart/fl_chart.dart';
+import 'dart:async';
 
 class ProgressScreen extends StatefulWidget {
   const ProgressScreen({super.key});
@@ -11,6 +13,7 @@ class ProgressScreen extends StatefulWidget {
 class _ProgressScreenState extends State<ProgressScreen> {
   int numericalMemoryPlays = 0;
   int memorizePositionPlays = 0;
+  List<int> weeklyActivity = List.filled(7, 0);
 
   @override
   void initState() {
@@ -24,6 +27,34 @@ class _ProgressScreenState extends State<ProgressScreen> {
       numericalMemoryPlays = prefs.getInt('numerical_memory_plays') ?? 0;
       memorizePositionPlays = prefs.getInt('memorize_position_plays') ?? 0;
     });
+
+    final dates1 = prefs.getStringList('play_dates_numerical_memory_plays') ?? [];
+    final dates2 = prefs.getStringList('play_dates_memorize_position_plays') ?? [];
+
+    final game1ByDay = _getWeeklyActivity(dates1);
+    final game2ByDay = _getWeeklyActivity(dates2);
+
+    setState(() {
+      for (int i = 0; i < 7; i++) {
+        weeklyActivity[i] = game1ByDay[i] + game2ByDay[i];
+      }
+    });
+  }
+
+  List<int> _getWeeklyActivity(List<String> isoDates) {
+    final now = DateTime.now();
+    final startOfWeek = now.subtract(Duration(days: now.weekday - 1)); // Monday
+    final endOfWeek = startOfWeek.add(const Duration(days: 6)); // Sunday
+    final dailyCounts = List.filled(7, 0);
+
+    for (var dateStr in isoDates) {
+      final date = DateTime.tryParse(dateStr);
+      if (date != null && date.isAfter(startOfWeek.subtract(const Duration(days: 1))) && date.isBefore(endOfWeek.add(const Duration(days: 1)))) {
+        final dayIndex = date.weekday - 1;
+        dailyCounts[dayIndex]++;
+      }
+    }
+    return dailyCounts;
   }
 
   double _calculateProgress(int plays) {
@@ -146,39 +177,101 @@ class _ProgressScreenState extends State<ProgressScreen> {
         ),
         actions: [
           IconButton(
-            icon: const Icon(Icons.emoji_events_outlined, color: Colors.white, size: 30,),
+            icon: const Icon(Icons.emoji_events_outlined, color: Colors.white, size: 30),
             onPressed: () => _showAchievementsModal(context),
           ),
         ],
       ),
-      body: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 32),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            const Text(
-              'Progress in mini-games',
-              style: TextStyle(
-                fontSize: 20,
-                color: Colors.white,
-                fontWeight: FontWeight.w700,
+      body: SingleChildScrollView(
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 32),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              // Weekly Chart
+              Container(
+                width: double.infinity,
+                decoration: BoxDecoration(
+                  border: Border.all(color: const Color(0xFFCDA73C), width: 1.5),
+                  borderRadius: BorderRadius.circular(16),
+                ),
+                padding: const EdgeInsets.all(16),
+                child: Column(
+                  children: [
+                    const Text(
+                      'This Week',
+                      style: TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.w600),
+                    ),
+                    const SizedBox(height: 16),
+                    SizedBox(
+                      height: 200,
+                      child: BarChart(
+                        BarChartData(
+                          alignment: BarChartAlignment.spaceAround,
+                          maxY: 10,
+                          borderData: FlBorderData(show: false),
+                          titlesData: FlTitlesData(
+                            leftTitles: AxisTitles(sideTitles: SideTitles(showTitles: false)),
+                            rightTitles: AxisTitles(sideTitles: SideTitles(showTitles: false)),
+                            topTitles: AxisTitles(sideTitles: SideTitles(showTitles: false)),
+                            bottomTitles: AxisTitles(
+                              sideTitles: SideTitles(
+                                showTitles: true,
+                                interval: 1,
+                                getTitlesWidget: (value, meta) {
+                                  const days = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
+                                  return Text(
+                                    days[value.toInt()],
+                                    style: const TextStyle(color: Colors.white, fontSize: 12),
+                                  );
+                                },
+                              ),
+                            ),
+                          ),
+                          barGroups: List.generate(7, (index) {
+                            return BarChartGroupData(
+                              x: index,
+                              barRods: [
+                                BarChartRodData(
+                                  toY: weeklyActivity[index].toDouble(),
+                                  width: 16,
+                                  color: const Color(0xFFCDA73C),
+                                  borderRadius: BorderRadius.circular(4),
+                                ),
+                              ],
+                            );
+                          }),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
               ),
-            ),
-            const SizedBox(height: 30),
-            Row(
-              children: [
-                _buildProgressItem(
-                  imagePath: 'assets/images/mini_games/1.png',
-                  progressPercent: numericalProgress,
+              const SizedBox(height: 30),
+              const Text(
+                'Progress in mini-games',
+                style: TextStyle(
+                  fontSize: 20,
+                  color: Colors.white,
+                  fontWeight: FontWeight.w700,
                 ),
-                const SizedBox(width: 30),
-                _buildProgressItem(
-                  imagePath: 'assets/images/mini_games/2.png',
-                  progressPercent: memorizeProgress,
-                ),
-              ],
-            ),
-          ],
+              ),
+              const SizedBox(height: 30),
+              Row(
+                children: [
+                  _buildProgressItem(
+                    imagePath: 'assets/images/mini_games/1.png',
+                    progressPercent: numericalProgress,
+                  ),
+                  const SizedBox(width: 30),
+                  _buildProgressItem(
+                    imagePath: 'assets/images/mini_games/2.png',
+                    progressPercent: memorizeProgress,
+                  ),
+                ],
+              ),
+            ],
+          ),
         ),
       ),
     );

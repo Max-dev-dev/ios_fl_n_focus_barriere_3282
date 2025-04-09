@@ -25,16 +25,23 @@ class _NumericalMemoryScreenState extends State<NumericalMemoryScreen> {
   @override
   void initState() {
     super.initState();
-    _incrementPlayCount();
+    _incrementPlayCount('numerical_memory_plays');
     _startGame();
   }
 
-  Future<void> _incrementPlayCount() async {
-  final prefs = await SharedPreferences.getInstance();
-  final currentCount = prefs.getInt('numerical_memory_plays') ?? 0;
-  await prefs.setInt('numerical_memory_plays', currentCount + 1);
-}
+  Future<void> _incrementPlayCount(String key) async {
+    final prefs = await SharedPreferences.getInstance();
 
+    final currentCount = prefs.getInt(key) ?? 0;
+    await prefs.setInt(key, currentCount + 1);
+    
+    final now = DateTime.now();
+    final dateKey =
+        'play_dates_$key';
+    final existingDates = prefs.getStringList(dateKey) ?? [];
+    existingDates.add(now.toIso8601String());
+    await prefs.setStringList(dateKey, existingDates);
+  }
 
   void _startGame() {
     _generatedNumbers.clear();

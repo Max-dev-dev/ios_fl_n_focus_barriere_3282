@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'dart:async';
 import 'package:ios_fl_n_casinobarriere_3282/pages/games/memorize_posiition_screen.dart';
 import 'package:ios_fl_n_casinobarriere_3282/pages/games/numerical_memory_screen.dart';
 
@@ -11,31 +12,136 @@ class MiniGamesScreen extends StatefulWidget {
 
 class _MiniGamesScreenState extends State<MiniGamesScreen> {
   int? selectedIndex;
+  late Timer _timer;
+  Duration timeUntilMidnight = _getTimeUntilMidnight();
 
   final List<String> imagePaths = [
     'assets/images/mini_games/1.png',
     'assets/images/mini_games/2.png',
-    //'assets/images/mini_games/3.png',
   ];
 
-  final List<String> titles = [
-    'Numerical Memory',
-    'Memorize positions',
-   // 'Find a match',
+  final List<String> titles = ['Numerical Memory', 'Memorize positions'];
+
+  final List<String> memoryExercises = [
+    'Try to remember a grocery list of 10 items without writing it down.',
+    'Close your eyes and visualize your route to work in detail.',
+    'Memorize a short poem or quote and recite it later today.',
+    'Play a card-matching game and try to beat your previous score.',
+    'Try remembering the birthdays of your family members in order.',
+    'Look around you, then close your eyes and list every object you saw.',
   ];
+
+  static Duration _getTimeUntilMidnight() {
+    final now = DateTime.now();
+    final tomorrow = DateTime(now.year, now.month, now.day + 1);
+    return tomorrow.difference(now);
+  }
+
+  String _formattedTime(Duration duration) {
+    final hours = duration.inHours.toString().padLeft(2, '0');
+    final minutes = (duration.inMinutes % 60).toString().padLeft(2, '0');
+    final seconds = (duration.inSeconds % 60).toString().padLeft(2, '0');
+    return '$hours:$minutes:$seconds';
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _timer = Timer.periodic(const Duration(seconds: 1), (_) {
+      setState(() {
+        timeUntilMidnight = _getTimeUntilMidnight();
+      });
+    });
+  }
+
+  @override
+  void dispose() {
+    _timer.cancel();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
+    final int dailyExerciseIndex = DateTime.now().day % memoryExercises.length;
+    final String dailyExercise = memoryExercises[dailyExerciseIndex];
+
     return Scaffold(
       appBar: AppBar(centerTitle: false, automaticallyImplyLeading: false),
       body: SizedBox(
         width: double.infinity,
         child: SingleChildScrollView(
           child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 20),
+            padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 0),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
+                Container(
+                  padding: EdgeInsets.symmetric(
+                    vertical: 16.0,
+                    horizontal: 8.0,
+                  ),
+                  decoration: BoxDecoration(
+                    color: const Color(0xFF1E1E1E),
+                    borderRadius: BorderRadius.circular(20),
+                  ),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Row(
+                        children: [
+                          Spacer(),
+                          Container(
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: 12,
+                              vertical: 6,
+                            ),
+                            decoration: BoxDecoration(
+                              color: const Color(0xFFCDA73C),
+                              borderRadius: BorderRadius.circular(20),
+                            ),
+                            child: Row(
+                              children: [
+                                Icon(Icons.access_time, color: Colors.black),
+                                const SizedBox(width: 8),
+                                Text(
+                                  _formattedTime(timeUntilMidnight),
+                                  style: const TextStyle(
+                                    color: Colors.black,
+                                    fontWeight: FontWeight.w600,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ],
+                      ),
+                      SizedBox(height: 5.0),
+                      Row(
+                        children: [
+                          Text(
+                            '🧠 Memory daily exercise:',
+                            textAlign: TextAlign.left,
+                            style: const TextStyle(
+                              fontSize: 18,
+                              color: Colors.white,
+                              fontWeight: FontWeight.w600,
+                            ),
+                          ),
+                        ],
+                      ),
+                      SizedBox(height: 5.0),
+                      Text(
+                        dailyExercise,
+                        textAlign: TextAlign.left,
+                        style: const TextStyle(
+                          fontSize: 16,
+                          color: Colors.white,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                const SizedBox(height: 20),
                 const Text(
                   'Mini-games',
                   style: TextStyle(
@@ -97,7 +203,6 @@ class _MiniGamesScreenState extends State<MiniGamesScreen> {
                                       width: 2,
                                     ),
                                   ),
-
                                   child: Text(
                                     titles[index],
                                     textAlign: TextAlign.center,
@@ -141,20 +246,11 @@ class _MiniGamesScreenState extends State<MiniGamesScreen> {
                           Navigator.push(
                             context,
                             MaterialPageRoute(
-                              builder: (_) => const MemorizePositionScreen (),
+                              builder: (_) => const MemorizePositionScreen(),
                             ),
                           );
-                        }                   
-                        // else if (selectedIndex == 2) {
-                        //   Navigator.push(
-                        //     context,
-                        //     MaterialPageRoute(
-                        //       builder: (_) => const NumericalMemoryScreen(),
-                        //     ),
-                        //   );
-                        // }
+                        }
                       },
-
                       child: const Text(
                         'START',
                         style: TextStyle(

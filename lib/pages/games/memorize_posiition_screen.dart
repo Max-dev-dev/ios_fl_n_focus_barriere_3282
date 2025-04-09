@@ -25,7 +25,7 @@ class _MemorizePositionScreenState extends State<MemorizePositionScreen> {
   @override
   void initState() {
     super.initState();
-    _incrementPlayCount();
+    _incrementPlayCount('memorize_position_plays');
     _generateRandomPositions();
     Future.delayed(const Duration(seconds: 5), () {
       setState(() {
@@ -35,12 +35,19 @@ class _MemorizePositionScreenState extends State<MemorizePositionScreen> {
     });
   }
 
-  Future<void> _incrementPlayCount() async {
-  final prefs = await SharedPreferences.getInstance();
-  final currentCount = prefs.getInt('memorize_position_plays') ?? 0;
-  await prefs.setInt('memorize_position_plays', currentCount + 1);
-}
+  Future<void> _incrementPlayCount(String key) async {
+    final prefs = await SharedPreferences.getInstance();
 
+    final currentCount = prefs.getInt(key) ?? 0;
+    await prefs.setInt(key, currentCount + 1);
+
+    final now = DateTime.now();
+    final dateKey =
+        'play_dates_$key';
+    final existingDates = prefs.getStringList(dateKey) ?? [];
+    existingDates.add(now.toIso8601String());
+    await prefs.setStringList(dateKey, existingDates);
+  }
 
   void _generateRandomPositions() {
     final rand = Random();

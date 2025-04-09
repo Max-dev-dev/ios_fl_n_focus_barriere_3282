@@ -56,7 +56,7 @@ class _TabsScreenState extends State<TabsScreen> {
         child: BottomNavigationBar(
           currentIndex: _selectedIndex,
           onTap: _onTabTapped,
-          backgroundColor: const Color(0xFF252525),
+          backgroundColor: Color.fromARGB(255, 85, 83, 83),
           type: BottomNavigationBarType.fixed,
           selectedItemColor: Colors.transparent,
           unselectedItemColor: Colors.transparent,

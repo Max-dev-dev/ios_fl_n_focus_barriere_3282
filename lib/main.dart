@@ -12,19 +12,6 @@ class MainApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      builder: (context, child) {
-        return Stack(
-          children: [
-            Positioned.fill(
-              child: Image.asset(
-                'assets/images/main_background.png',
-                fit: BoxFit.cover,
-              ),
-            ),
-            child ?? const SizedBox.shrink(),
-          ],
-        );
-      },
       theme: ThemeData(
         textTheme: const TextTheme(
           bodyLarge: TextStyle(color: Colors.white),
@@ -43,8 +30,8 @@ class MainApp extends StatelessWidget {
           labelMedium: TextStyle(color: Colors.white),
           labelSmall: TextStyle(color: Colors.white),
         ),
-        appBarTheme: const AppBarTheme(backgroundColor: Colors.transparent),
-        scaffoldBackgroundColor: Color(0xFF252525),
+        appBarTheme: const AppBarTheme(backgroundColor: Color.fromARGB(255, 85, 83, 83)),
+        scaffoldBackgroundColor: Color.fromARGB(255, 85, 83, 83),
       ),
       home: SplashScreen(),
     );
