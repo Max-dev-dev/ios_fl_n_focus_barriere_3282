@@ -16,7 +16,7 @@ dependencies:
   intl: ^0.20.2
   fl_chart: ^0.70.2
   url_launcher: ^6.3.1
-  flutter_native_splash: ^2.4.5
+  flutter_native_splash: ^2.4.6
   onesignal_flutter: ^5.3.0
   appsflyer_sdk: ^6.15.2
   flutter_inappwebview: ^6.1.5
@@ -30,7 +30,7 @@ dependencies:
 
 flutter_native_splash:
   color: '#ffffff'
-  image: images/l1.png
+  image: assets/images/l1.png
   ios_content_mode: scaleAspectFill
 
 dev_dependencies:

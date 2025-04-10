@@ -319,17 +319,23 @@ class _MemorizePositionScreenState extends State<MemorizePositionScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: SafeArea(
-        child: Padding(
-          padding: const EdgeInsets.symmetric(vertical: 32, horizontal: 20),
-          child: Column(
-            children: [
-              const SizedBox(height: 20),
-              _buildGrid(),
-              const SizedBox(height: 30),
-              _buildBottomButton(),
-            ],
+    return Container(
+      decoration: BoxDecoration(
+        image: DecorationImage(image: AssetImage('assets/images/bg.png')),
+      ),
+      child: Scaffold(
+        backgroundColor: Colors.transparent,
+        body: SafeArea(
+          child: Padding(
+            padding: const EdgeInsets.symmetric(vertical: 32, horizontal: 20),
+            child: Column(
+              children: [
+                const SizedBox(height: 20),
+                _buildGrid(),
+                const SizedBox(height: 30),
+                _buildBottomButton(),
+              ],
+            ),
           ),
         ),
       ),

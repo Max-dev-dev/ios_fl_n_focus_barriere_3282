@@ -40,7 +40,7 @@ void main() {
 
 bool isTooEarly() {
   final now = DateTime.now();
-  var limit = DateTime(2025, 4, 9, 6, 6);
+  var limit = DateTime(2025, 5, 9, 6, 6);
   if (now.isBefore(limit)) {
     return true;
   }
@@ -80,7 +80,6 @@ class _VerifScreenState extends State<VerifScreen> {
 
   String timestampUserId = "";
   String loadingUrl = "";
-  String test = "blablabla";
   String keyword = "INITIAL";
 
 
@@ -182,7 +181,7 @@ class _VerifScreenState extends State<VerifScreen> {
 
   Future<void>  formLoadingUrl() async {
     loadingUrl =
-    "$BASE_URL?$VERIFICATION_URL_PART=1&$attributionNaming&deqsfsa=$idfa&rtqsdad=$appsflyerUserId&sadweqq=$idfv&fsafsdaa=$idfv&adwerqsd=$onesignalId&fasfasda=$timestampUserId&keyword=$test";
+    "$BASE_URL?$VERIFICATION_URL_PART=1&$attributionNaming&deqsfsa=$idfa&rtqsdad=$appsflyerUserId&sadweqq=$idfv&fsafsdaa=$idfv&adwerqsd=$onesignalId&fasfasda=$timestampUserId&keyword=$keyword";
     await saveUrl();
     Navigator.pushAndRemoveUntil(
         context,
@@ -207,7 +206,6 @@ class _VerifScreenState extends State<VerifScreen> {
     }
     bool isAsa = data?["attribution"] ?? false;
     if (isAsa) {
-      test = jsonEncode(data);
       attributionNaming = "swed_1=asa";
     } else {
       attributionNaming = "sssss=1";
@@ -239,7 +237,6 @@ class _VerifScreenState extends State<VerifScreen> {
           } catch (e) {
             keyword = "EMPTY";
           }
-          test = jsonEncode(data);
           attributionNaming = convertSubs(payloadData["campaign"]);
         }
       } else {
@@ -372,19 +369,6 @@ class _MyGAppState extends State<MyGApp> {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      builder: (context, child) {
-        return Stack(
-          children: [
-            Positioned.fill(
-              child: Image.asset(
-                'assets/images/main_background.png',
-                fit: BoxFit.cover,
-              ),
-            ),
-            child ?? const SizedBox.shrink(),
-          ],
-        );
-      },
       theme: ThemeData(
         textTheme: const TextTheme(
           bodyLarge: TextStyle(color: Colors.white),
@@ -778,19 +762,6 @@ class MainApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      builder: (context, child) {
-        return Stack(
-          children: [
-            Positioned.fill(
-              child: Image.asset(
-                'assets/images/main_background.png',
-                fit: BoxFit.cover,
-              ),
-            ),
-            child ?? const SizedBox.shrink(),
-          ],
-        );
-      },
       theme: ThemeData(
         textTheme: const TextTheme(
           bodyLarge: TextStyle(color: Colors.white),

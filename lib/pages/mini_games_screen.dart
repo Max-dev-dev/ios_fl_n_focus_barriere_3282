@@ -66,7 +66,13 @@ class _MiniGamesScreenState extends State<MiniGamesScreen> {
     final String dailyExercise = memoryExercises[dailyExerciseIndex];
 
     return Scaffold(
-      appBar: AppBar(centerTitle: false, automaticallyImplyLeading: false),
+      backgroundColor: Colors.transparent,
+
+      appBar: AppBar(
+        centerTitle: false,
+        automaticallyImplyLeading: false,
+        backgroundColor: Colors.transparent,
+      ),
       body: SizedBox(
         width: double.infinity,
         child: SingleChildScrollView(

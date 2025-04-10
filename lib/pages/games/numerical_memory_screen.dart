@@ -270,7 +270,7 @@ class _NumericalMemoryScreenState extends State<NumericalMemoryScreen> {
       children: [
         Positioned.fill(
           child: Image.asset(
-            'assets/images/numeral_background.png',
+            'assets/images/bg.png',
             fit: BoxFit.fill,
           ),
         ),

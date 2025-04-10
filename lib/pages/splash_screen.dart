@@ -2,6 +2,7 @@
 
 import 'package:app_tracking_transparency/app_tracking_transparency.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'dart:async';
 
 import 'package:ios_fl_n_casinobarriere_3282/pages/tabs_screen.dart';
@@ -18,8 +19,19 @@ class _SplashScreenState extends State<SplashScreen> {
   void initState() {
     super.initState();
     initialization();
-    _navigateToHomeScreen();
+    Future.delayed(const Duration(seconds: 2), () async {
+      FlutterNativeSplash.remove();
+      Future.delayed(const Duration(seconds: 2), () async {
+        if (mounted) {
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(builder: (context) => const TabsScreen()),
+          );
+        }
+      });
+    });
   }
+
 
   void initialization() async {
     final TrackingStatus status =
@@ -29,13 +41,7 @@ class _SplashScreenState extends State<SplashScreen> {
     }
   }
 
-  Future<void> _navigateToHomeScreen() async {
-    await Future.delayed(const Duration(seconds: 2));
 
-    Navigator.of(context).pushReplacement(
-      MaterialPageRoute(builder: (context) => const TabsScreen()),
-    );
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -44,20 +50,6 @@ class _SplashScreenState extends State<SplashScreen> {
         fit: StackFit.expand,
         children: [
           Image.asset('assets/images/splash_background.png', fit: BoxFit.cover),
-          const Align(
-            alignment: Alignment.bottomCenter,
-            child: Padding(
-              padding: EdgeInsets.only(bottom: 100),
-              child: SizedBox(
-                width: 70,
-                height: 70,
-                child: CircularProgressIndicator(
-                  color: Color(0xFFCDA73C),
-                  strokeWidth: 6.0,
-                ),
-              ),
-            ),
-          ),
         ],
       ),
     );

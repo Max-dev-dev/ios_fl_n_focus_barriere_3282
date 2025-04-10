@@ -46,7 +46,11 @@ class HomeScreen extends StatelessWidget {
     final String randomTip = memoryTips[Random().nextInt(memoryTips.length)];
 
     return Scaffold(
+      backgroundColor: Colors.transparent,
+
       appBar: AppBar(
+        backgroundColor: Colors.transparent,
+
         centerTitle: false,
         automaticallyImplyLeading: false,
         title: const Text(
@@ -119,28 +123,35 @@ class BrainExerciseScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        leading: IconButton(
-          onPressed: () => Navigator.pop(context),
-          icon: Icon(Icons.arrow_back, color: Colors.white),
-        ),
-        centerTitle: true,
-        automaticallyImplyLeading: false,
-        title: const Text(
-          'Brain exercises',
-          style: TextStyle(
-            fontSize: 20,
-            color: Colors.white,
-            fontWeight: FontWeight.w600,
+    return Container(
+      decoration: BoxDecoration(
+        image: DecorationImage(image: AssetImage('assets/images/bg.png')),
+      ),
+      child: Scaffold(
+        backgroundColor: Colors.transparent,
+        appBar: AppBar(
+          backgroundColor: Colors.transparent,
+          leading: IconButton(
+            onPressed: () => Navigator.pop(context),
+            icon: Icon(Icons.arrow_back, color: Colors.white),
+          ),
+          centerTitle: true,
+          automaticallyImplyLeading: false,
+          title: const Text(
+            'Brain exercises',
+            style: TextStyle(
+              fontSize: 20,
+              color: Colors.white,
+              fontWeight: FontWeight.w600,
+            ),
           ),
         ),
-      ),
-      body: SingleChildScrollView(
-        child: Center(
-          child: Padding(
-            padding: const EdgeInsets.all(20.0),
-            child: Image.asset(imagePath, fit: BoxFit.contain),
+        body: SingleChildScrollView(
+          child: Center(
+            child: Padding(
+              padding: const EdgeInsets.all(20.0),
+              child: Image.asset(imagePath, fit: BoxFit.contain),
+            ),
           ),
         ),
       ),

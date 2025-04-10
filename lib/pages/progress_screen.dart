@@ -164,8 +164,10 @@ class _ProgressScreenState extends State<ProgressScreen> {
     final memorizeProgress = _calculateProgress(memorizePositionPlays);
 
     return Scaffold(
+      backgroundColor: Colors.transparent,
       appBar: AppBar(
         centerTitle: false,
+        backgroundColor: Colors.transparent,
         automaticallyImplyLeading: false,
         title: const Text(
           'Progress',

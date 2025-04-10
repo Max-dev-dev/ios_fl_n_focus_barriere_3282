@@ -39,43 +39,44 @@ class _TabsScreenState extends State<TabsScreen> {
     return AnimatedContainer(
       duration: const Duration(milliseconds: 200),
       margin: EdgeInsets.only(top: isSelected ? 0 : 40),
-      child: Image.asset(
-        fit: BoxFit.contain,
-        assetPath,
-        width: 60,
-        height: 60,
-      ),
+      child: Image.asset(fit: BoxFit.contain, assetPath, width: 60, height: 60),
     );
   }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: _screens[_selectedIndex],
-      bottomNavigationBar: SizedBox(
-        child: BottomNavigationBar(
-          currentIndex: _selectedIndex,
-          onTap: _onTabTapped,
-          backgroundColor: Color.fromARGB(255, 85, 83, 83),
-          type: BottomNavigationBarType.fixed,
-          selectedItemColor: Colors.transparent,
-          unselectedItemColor: Colors.transparent,
-          showSelectedLabels: false,
-          showUnselectedLabels: false,
-          items: [
-            BottomNavigationBarItem(
-              icon: _buildTabIcon('assets/images/1.png', 0),
-              label: '',
-            ),
-            BottomNavigationBarItem(
-              icon: _buildTabIcon('assets/images/2.png', 1),
-              label: '',
-            ),
-            BottomNavigationBarItem(
-              icon: _buildTabIcon('assets/images/3.png', 2),
-              label: '',
-            ),
-          ],
+    return Container(
+      decoration: BoxDecoration(
+        image: DecorationImage(image: AssetImage('assets/images/bg.png')),
+      ),
+      child: Scaffold(
+        backgroundColor: Colors.transparent,
+        body: _screens[_selectedIndex],
+        bottomNavigationBar: SizedBox(
+          child: BottomNavigationBar(
+            currentIndex: _selectedIndex,
+            onTap: _onTabTapped,
+            backgroundColor: Colors.transparent,
+            type: BottomNavigationBarType.fixed,
+            selectedItemColor: Colors.transparent,
+            unselectedItemColor: Colors.transparent,
+            showSelectedLabels: false,
+            showUnselectedLabels: false,
+            items: [
+              BottomNavigationBarItem(
+                icon: _buildTabIcon('assets/images/1.png', 0),
+                label: '',
+              ),
+              BottomNavigationBarItem(
+                icon: _buildTabIcon('assets/images/2.png', 1),
+                label: '',
+              ),
+              BottomNavigationBarItem(
+                icon: _buildTabIcon('assets/images/3.png', 2),
+                label: '',
+              ),
+            ],
+          ),
         ),
       ),
     );
